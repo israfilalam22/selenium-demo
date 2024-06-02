@@ -22,14 +22,35 @@ pipeline {
 
         stage('Docker Scan') {
             steps {
-                sh 'trivy image --severity HIGH,CRITICAL israfilalam22/selenium-demo'
+                sh 'docker run --rm -v $(pwd):/project aquasec/trivy image --severity HIGH,CRITICAL israfilalam22/selenium-demo'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                // Selenium Plugin steps
+                seleniumSetup(browsers: [chrome()])
+                seleniumScript(script: 'mvn test')
             }
+        }
+
+        stage('Publish HTML Report') {
+            steps {
+                publishHTML(target: [
+                    reportDir: 'target/surefire-reports',
+                    reportFiles: 'index.html',
+                    reportName: 'HTML Report',
+                    keepAll: true,
+                    alwaysLinkToLastBuild: true,
+                    allowMissing: false
+                ])
+            }
+        }
+    }
+
+    post {
+        always {
+            junit 'target/surefire-reports/*.xml'
         }
     }
 }
