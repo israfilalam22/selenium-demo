@@ -48,6 +48,12 @@ pipeline {
                 ])
             }
         }
+
+        stage('Debug') {
+            steps {
+                sh 'ls -l /usr/local/bin/'
+            }
+        }
     }
 
     post {
