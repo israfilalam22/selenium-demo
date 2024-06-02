@@ -14,11 +14,14 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
-            steps {
-                sh 'docker build -t israfilalam22/selenium-demo .'
-            }
+stage('Docker Build') {
+    steps {
+        dir('selenium-demo') {
+            sh 'docker build -t israfilalam22/selenium-demo .'
         }
+    }
+}
+
 
         stage('Docker Scan') {
             steps {
