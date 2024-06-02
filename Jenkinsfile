@@ -28,8 +28,10 @@ pipeline {
 
         stage('Test') {
             steps {
-                // Selenium Plugin steps
-                seleniumSetup(browsers: [chrome()])
+                // Selenium Plugin steps with ChromeDriver path specified
+                seleniumSetup(
+                    browsers: [chrome(chromeDriverPath: '/usr/local/bin/chromedriver')]
+                )
                 seleniumScript(script: 'mvn test')
             }
         }
